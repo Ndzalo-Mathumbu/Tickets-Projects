@@ -15,15 +15,15 @@ function generateBarcode(ticketNumber) {
   
   function generateTickets() {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    sheet.clear(); // Clear existing data
+    sheet.clear();
     sheet.appendRow(['Ticket Number', 'Barcode URL', 'Status']);
     
-    var codes = new Set(); // To ensure uniqueness of the ticket codes
+    var codes = new Set();
     for (var i = 1; i <= 520; i++) {
       var ticketCode;
       do {
         ticketCode = generateTicketCode();
-      } while (codes.has(ticketCode)); // Ensure unique code
+      } while (codes.has(ticketCode));
       codes.add(ticketCode);
       var barcodeUrl = generateBarcode(ticketCode);
       sheet.appendRow([ticketCode, barcodeUrl, '']);
@@ -39,7 +39,7 @@ function generateBarcode(ticketNumber) {
         if (data[i][2] == 'Used') {
           return ContentService.createTextOutput(JSON.stringify({ valid: false, message: 'Invalid ticket. This ticket has already been used.' })).setMimeType(ContentService.MimeType.JSON);
         } else {
-          sheet.getRange(i + 1, 3).setValue('Used'); // Mark ticket as used
+          sheet.getRange(i + 1, 3).setValue('Used');
           return ContentService.createTextOutput(JSON.stringify({ valid: true, message: 'ACCESS GRANTED.' })).setMimeType(ContentService.MimeType.JSON);
         }
       }
